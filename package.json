@@ -1,0 +1,40 @@
+{
+	"name" : "hubby",
+	"version" : "0.1.0",
+	"engines" : [
+		"node >=0.4.0"
+	],
+	"description" : "A high feature, distributed, low latency and secure message exchange bus based on redis and mongodb",
+	"author" : "Richard Kuesters <richard@humantech.com.br>",
+	"private" : true,
+	"contributors" : [
+		"Guilherme Henrique de Oliveira <guilherme@humantech.com.br>",
+		"Thomas Alexander Ewald <thomas@humantech.com.br>"
+	],
+	"license" : {
+		"type" : "MIT"
+	},
+	"keywords" : [
+		"hub",
+		"bus",
+		"queue",
+		"broadcast"
+	],
+	"repository" : {
+		"type" : "git",
+		"url" : "ssh://tund.ht.lan/git/hubby"
+	},
+	"scripts" : {},
+	"directories" : {},
+	"main" : "./lib/hubby.js",
+	"dependencies" : {
+		"redis" : "0.7.2",
+		"mongodb" : "1.0.0",
+		"amanda" : "0.4.2",
+		"underscore" : "1.3.3"
+	},
+	"devDependencies" : {},
+	"optionalDependencies" : {
+		"hiredis" : "0.1.14"
+	}
+}
