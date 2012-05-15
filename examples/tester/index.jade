@@ -1,0 +1,95 @@
+doctype 5
+html
+	head
+		title Hubby
+		link(href='/css/app.css', rel='stylesheet')
+		link(href='/css/bootstrap.min.css', rel='stylesheet')
+		link(href='/css/bootstrap-responsive.min.css', rel='stylesheet')
+	body
+		div.navbar.navbar-fixed-top
+			div.navbar-inner
+				div.container
+					a.brand(href='/') Hubby
+		div.container-fluid.main-container
+			div.span4.offset2.schema-list
+				h1 List of schemas
+				p The list below show the avaible schemas
+				ul.schema-list-placeholder
+				button.btn.btn-info#schema-list-btn(type='button') Refresh
+			div.span4.schema-create
+				h1 Create a schema
+				p Use the form below to create schemas
+				form.form-vertical#schema-create-form
+					fieldset
+						div.control-group
+							label.control-label(for='name') Name
+							div.controls
+								input.input-xlarge#name(type='text')
+						div.control-group
+							label.control-label(for='version') Version
+							div.controls
+								input.input-xlarge#version(type='text')
+						div.control-group
+							label.control-label(for='schema') Schema
+							div.controls
+								textarea.input-xlarge#schema(type='text', rows='3')
+								p.help-block Do not use line breaks
+						div.form-actions
+							button.btn.btn-primary(type='submit') Send
+							button.btn#reset-btn(type='reset') Cancel
+	script(src='/js/jquery.js')
+	script(src='/js/bootstrap.min.js')
+	script(src='/js/underscore-min.js')
+	script
+		
+		var schemas = {};
+
+		$('#schema-list-btn').click(function(){
+			$.post('/list-schemas', {}, function(data, textStatus, xhr) {
+				if(textStatus == 'success'){
+
+					schemas = data;
+
+					$('.schema-list-placeholder').html('');
+					_.map(data, function(schema, name){
+						$('.schema-list-placeholder').append(
+							'<li><a href="javascript:void(0)" rel="">'+name+'</a></li>'
+						);
+					});
+				}else{
+					alert('Problem to load schemas');
+				}
+			});			
+		});
+
+		$('#schema-create-form').submit(function(e){
+			
+			e.preventDefault();
+			e.stopImmediatePropagation();
+
+			var name = $('#name').val();
+			var version = $('#version').val();
+			var schema = $.trim($('#schema').val());
+
+			if(!_.isEmpty(name) && !_.isEmpty(version) && !_.isEmpty(schema)){
+
+				var data = {
+					name: name, 
+					version: version, 
+					schema: schema
+				};
+
+				$.post('/create-schemas', data, function(data, textStatus, xhr) {
+					
+					$('#reset-btn').click();
+					$('#schema-list-btn').click();
+
+					if(textStatus == 'success'){
+						console.log('created schema');
+					}else{
+						alert('Problem to load schemas');
+					}
+				});
+			}			
+		});
+
