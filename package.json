@@ -1,12 +1,11 @@
 {
 	"name" : "hubby",
 	"version" : "0.1.0",
-	"engines" : [
-		"node >=0.4.0"
-	],
+	"engines" : {
+		"node" : ">=0.4"
+	},
 	"description" : "A high feature, distributed, low latency and secure message exchange bus based on redis and mongodb",
 	"author" : "Richard Kuesters <richard@humantech.com.br>",
-	"private" : true,
 	"contributors" : [
 		"Guilherme Henrique de Oliveira <guilherme@humantech.com.br>",
 		"Thomas Alexander Ewald <thomas@humantech.com.br>"
@@ -22,20 +21,24 @@
 	],
 	"repository" : {
 		"type" : "git",
-		"url" : "ssh://tund.ht.lan/git/hubby"
+		"url" : "git://github.com/humantech/hubby.git"
 	},
 	"scripts" : {},
 	"directories" : {},
 	"main" : "./lib/hubby.js",
 	"dependencies" : {
-		"redis" : "0.7.2",
-		"mongodb" : "1.0.0",
-		"amanda" : "0.4.2",
-		"underscore" : "1.3.3",
-		"node-uuid" : "1.3.3"
+		"redis" : ">=0.7.2",
+		"mongodb" : ">=1.0.0",
+		"amanda" : ">=0.4.2",
+		"underscore" : ">=1.3.3",
+		"node-uuid" : ">=1.3.3"
 	},
 	"devDependencies" : {},
 	"optionalDependencies" : {
-		"hiredis" : "0.1.14"
+		"hiredis" : ">=0.1.14"
+	},
+	"bugs" : {
+		"email" : "thomas@humantech.com.br",
+		"url" : "https://github.com/humantech/hubby/issues
 	}
 }
