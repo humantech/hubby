@@ -38,8 +38,7 @@ hubby.on('initialized', function(){
 				type: 'string'
 			},
 			body: {
-				requeu quero, você tem toda razão... agora que está na faze de preparação para pintura... vem um bocado de "vontades"... mas como a voz da razão dita (e tem que ditar mesmo) e fala mais alto, vou seguindo buscando o máximo de originalidade. talvez a única mudança que eu faça, seja mesmo a pintura para o azul mediterrâneo.
-Muito agradecido pela orienired: true,
+				required: true,
 				type: 'string'
 			}
 		}
