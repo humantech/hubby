@@ -2,13 +2,13 @@
 
 **Warning I:** this project is in early development stage, you might not find it useful for now.
 
-Hubby has the following features working:
+Hubby has the following features working (or at least we think so):
 
-* Message queue
-* Message broadcast
-* Message schema validation using `amanda`
+* Named queues
+* Broadcasting
+* JSON schema validation using [`amanda`](https://github.com/Baggz/Amanda/)
 
-Each schema has his own queue, so listener programs will need to subscribe to schema names.
+Each schema has its own queue, so listeners needs to subscribe to schema names.
 
 ## Install from npm
 ```
@@ -19,7 +19,7 @@ $ npm install hubby
 ```javascript
 var hubby = require('hubby')();
 
-hubby.on('initialized', function(){
+hubby.on('initialized', function() {
 	// message schema format
 	var messageSchema = {
 		type: 'object',
@@ -45,13 +45,13 @@ hubby.on('initialized', function(){
 	};
 
 	// create or update the schema
-	hubby.createSchema('Message', function(schema){
+	hubby.createSchema('Message', function(schema) {
 		console.log('Schema \'Message\' created');
 	}, null, messageSchema);
 
 	// subscribe to 'Message' schema queue
-	hubby.subscribe(['Message'], function(err){
-		if(err){
+	hubby.subscribe(['Message'], function(err) {
+		if (err) {
 			console.log('Subscribe error');
 		} else {
 			console.log('Subscribed to: \'Message\'');
@@ -60,18 +60,18 @@ hubby.on('initialized', function(){
 
 });
 
-hubby.on('Message', function(msg){
-	// this msg parameter is an object { uuid: '', schema: { name: '', version: 0 } }
+hubby.on('Message', function(msg) {
+	// the msg parameter is an object, ex: { uuid: '', schema: { name: '', version: 0 } }
 	var m = JSON.parse(msg);
-	// get the real message queued
+	// get the queued message
 	hubby.requestMessage(m.uuid, function(message){
-		if ( message && message.content ){
+		if (message && message.content) {
 			// do something useful
 			console.log('Message from ' + message.content.sender + ' to ' + message.content.recipient + ' received');
 			// mark message as read
-			hubby.setMessageStatus(m.uuid, 'read', function(){
+			hubby.setMessageStatus(m.uuid, 'read', function() {
 	                        out.loginfo(plugin, 'message processed');
-          	          });
+          	        });
 		} else {
 			console.log('Message ' + m.uuid + ' not found');
 		}
@@ -90,7 +90,8 @@ var conf = {
         port : 27017,
         db: 'hubby',
         args : {
-            auto_reconnect : true
+            auto_reconnect : true,
+            native_parser : true // DO NOT USE IT WITH mongodb=1.0.0
         }
     }
 };
@@ -98,7 +99,9 @@ var conf = {
 // if mongo and redis are in their default ports, you don't need to use the conf parameter
 hubby.initialize(conf);
 
-// sending a message
+/*
+----> sending a message
+*/
 
 // sample message content
 var content = {
@@ -109,15 +112,15 @@ var content = {
 };
 
 // get the schema
-hubby.createSchema('Message', function(schema){
+hubby.createSchema('Message', function(schema) {
 	// create an empty new message
-	hubby.createMessage(function(message){
+	hubby.createMessage(function(message) {
 		// set schema properties
 		message.schema = {name: schema.name, version: schema.version};
 		// ser content
-		message.setContent(content, function(result, err){
-			if ( !err ){
-				// finally send some message
+		message.setContent(content, function(result, err) {
+			if (!err) {
+				// finally send messages
 				hubby.enqueue(message);
 			} else {
 				// uh-oh... validation error
@@ -130,9 +133,9 @@ hubby.createSchema('Message', function(schema){
 ```
 ### Available events
 
-`hubby.on('broadcast', function(messageNotification){})`
+`hubby.on('broadcast', function(messageNotification) {});`
 
-`hubby.on('<schema name>', function(messageNotification){})`
+`hubby.on('<schema name>', function(messageNotification) {});`
 
 ### API
 
